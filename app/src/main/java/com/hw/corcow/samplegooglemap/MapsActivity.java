@@ -31,7 +31,8 @@ import java.util.Map;
 import java.util.jar.Manifest;
 
 public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback,                              // FragmentActivity >> AppCompatActivity
-        GoogleMap.OnMarkerClickListener, GoogleMap.OnInfoWindowClickListener, GoogleMap.OnMapClickListener {    // Map 요소의 클릭 이벤트를 받을 Listener들 implements
+        GoogleMap.OnMarkerClickListener, GoogleMap.OnInfoWindowClickListener, GoogleMap.OnMapClickListener,     // Map 요소의 클릭 이벤트를 받을 Listener들 implements
+        GoogleMap.OnMarkerDragListener {
 
     private GoogleMap mMap;
     LocationManager mLM;            // 지도 정보 얻어오려면 LocationManager !
@@ -171,6 +172,10 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         mMap.setOnMarkerClickListener(this);
         mMap.setOnInfoWindowClickListener(this);
         mMap.setOnMapClickListener(this);
+        mMap.setOnMarkerDragListener(this);
+
+        /** Marker의 INFO WINDOW 를 Customizing한 View로 수정 */
+        mMap.setInfoWindowAdapter(new MyInfoWindow(this, mPOIResolver));
 
         // 캐싱된 Location이 있다면 >> 그 위치를 보여라
         if (cacheLocation != null) {
@@ -198,6 +203,18 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         Toast.makeText(this, "title : " + poi.title , Toast.LENGTH_SHORT).show();
         marker.showInfoWindow();
         return true;
+    }
+    @Override
+    public void onMarkerDragStart(Marker marker) {
+    }
+
+    @Override
+    public void onMarkerDrag(Marker marker) {
+    }
+
+    @Override
+    public void onMarkerDragEnd(Marker marker) {
+        LatLng latLng = marker.getPosition();
     }
 
     /** moveMap : 지도 이동 */
